@@ -16,10 +16,10 @@ class PromptsClass:
     @cached(cache=TTLCache(maxsize=128, ttl=60))  # TTL is set to 60 seconds (1 minute)
     def _load_prompts(self) -> dict:
         try:
-            prompt = mongo.prompts.find_one({"bot_id": self.bot_id})
-            if not prompt:
+            if prompt := mongo.prompts.find_one({"bot_id": self.bot_id}):
+                return prompt
+            else:
                 return {SUMMARIZATION_PROMPT: None, SYSTEM_MESSAGE_PROMPT: None}
-            return prompt
         except Exception as e:
             print(f"Error loading prompts: {e}")
             raise
@@ -39,9 +39,7 @@ class PromptsClass:
 
 def load_prompts(bot_id: str) -> Optional[PromptsClass]:
     try:
-        if not bot_id:
-            return None
-        return PromptsClass(bot_id)
+        return None if not bot_id else PromptsClass(bot_id)
     except Exception as e:
         print(f"Error loading prompts: {e}")
         return None

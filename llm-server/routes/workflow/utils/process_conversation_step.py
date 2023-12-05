@@ -45,13 +45,11 @@ def process_conversation_step(
         app=app,
         context=context,
     )
-    messages: List[BaseMessage] = []
-    messages.append(system_message_classifier)
-
-    if len(prev_conversations) > 0:
+    messages: List[BaseMessage] = [system_message_classifier]
+    if prev_conversations:
         messages.extend(prev_conversations)
 
-    if context and len(api_summaries) > 0 and len(flows) > 0:
+    if context and api_summaries and flows:
         messages.append(
             HumanMessage(
                 content=f"Here is some relevant context I found that might be helpful - ```{dumps(context)}```. Also, here is the excerpt from API swagger for the APIs I think might be helpful in answering the question ```{dumps(api_summaries)}```. I also found some api flows, that maybe able to answer the following question ```{dumps(flows)}```. If one of the flows can accurately answer the question, then set `id` in the response should be the ids defined in the flows. Flows should take precedence over the api_summaries"
@@ -76,9 +74,6 @@ def process_conversation_step(
                 content=f"I found API summaries that might be helpful in answering the question. Here are the api summaries: ```{dumps(api_summaries)}```. "
             )
         )
-    else:
-        pass
-
     messages.append(
         HumanMessage(
             content="""Based on the information provided to you I want you to answer the questions that follow. Your should respond with a json that looks like the following - 

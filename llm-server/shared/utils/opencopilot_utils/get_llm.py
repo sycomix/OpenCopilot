@@ -8,10 +8,10 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 def get_llama_llm():
     n_gpu_layers = 1  # Metal set to 1 is enough.
     n_batch = 512  # Should be between 1 and n_ctx, consider the amount of RAM of your Apple Silicon Chip.
-    
+
     # Callbacks support token-wise streaming
     callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
-    llm = LlamaCpp(
+    return LlamaCpp(
         model_path="llama-2-7b-chat.ggmlv3.q4_K_M.bin",
         n_gpu_layers=n_gpu_layers,
         n_batch=n_batch,
@@ -21,8 +21,6 @@ def get_llama_llm():
         verbose=True,
         temperature=0.2,
     )
-    
-    return llm
 
 # Azure OpenAI Language Model client
 def get_azure_openai_llm():

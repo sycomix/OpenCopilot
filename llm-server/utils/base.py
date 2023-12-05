@@ -13,9 +13,8 @@ def generate_random_token(length: int = 16):
         str: A random token string.
     """
     characters = string.ascii_letters + string.digits
-    token = "".join(secrets.choice(characters) for i in range(length))
-    return token
+    return "".join(secrets.choice(characters) for _ in range(length))
 
 
 def resolve_abs_local_file_path_from(filename: str):
-    return "shared_data/" + filename
+    return f"shared_data/{filename}"

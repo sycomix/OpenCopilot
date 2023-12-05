@@ -32,21 +32,22 @@ def replace_ref_with_value(
     input_dict: Dict[str, Any], json_spec_dict: Dict[str, Any]
 ) -> None:
     def replace_ref_recursive(sub_dict: Dict[str, Any]) -> None:
-        if isinstance(sub_dict, dict):
-            if "$ref" in sub_dict:
-                ref_value: str = sub_dict["$ref"]
-                split_ref: List[str] = ref_value.split("/")
-                if len(split_ref) > 3:
-                    replacement_key: str = "/".join(split_ref[1:])
-                    replacement_value: Any = get_nested_value(
-                        json_spec_dict, replacement_key
-                    )
-                    if replacement_value is not None:
-                        sub_dict.clear()
-                        sub_dict.update(replacement_value)
-            else:
-                for _, value in sub_dict.items():
-                    replace_ref_recursive(value)
+        if not isinstance(sub_dict, dict):
+            return
+        if "$ref" in sub_dict:
+            ref_value: str = sub_dict["$ref"]
+            split_ref: List[str] = ref_value.split("/")
+            if len(split_ref) > 3:
+                replacement_key: str = "/".join(split_ref[1:])
+                replacement_value: Any = get_nested_value(
+                    json_spec_dict, replacement_key
+                )
+                if replacement_value is not None:
+                    sub_dict.clear()
+                    sub_dict.update(replacement_value)
+        else:
+            for _, value in sub_dict.items():
+                replace_ref_recursive(value)
 
     def get_nested_value(d: Dict[str, Any], key: str) -> Any:
         keys = key.split("/")

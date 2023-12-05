@@ -34,11 +34,7 @@ async def get_relevant_docs(text: str, bot_id: str) -> Optional[str]:
         result = kb_retriever.get_relevant_documents(text)
 
         if result and len(result) > 0:
-            # Assuming result is a list of objects and each object has a page_content attribute
-            all_page_content = "\n\n".join([item.page_content for item in result])
-
-            return all_page_content
-
+            return "\n\n".join([item.page_content for item in result])
         return None
 
     except Exception as e:
@@ -65,10 +61,9 @@ async def get_relevant_flows(text: str, bot_id: str) -> List[WorkflowFlowType]:
 
         results = flow_retriever.get_relevant_documents(text)
 
-        resp: List[WorkflowFlowType] = []
-        for result in results:
-            resp.append(result.metadata["operation"])
-
+        resp: List[WorkflowFlowType] = [
+            result.metadata["operation"] for result in results
+        ]
         return resp
 
     except Exception as e:
@@ -95,10 +90,9 @@ async def get_relevant_apis_summaries(text: str, bot_id: str) -> List[ApiOperati
 
         results = apis_retriever.get_relevant_documents(text)
 
-        resp: List[ApiOperation_vs] = []
-        for result in results:
-            resp.append(result.metadata["operation"])
-
+        resp: List[ApiOperation_vs] = [
+            result.metadata["operation"] for result in results
+        ]
         return resp
 
     except Exception as e:

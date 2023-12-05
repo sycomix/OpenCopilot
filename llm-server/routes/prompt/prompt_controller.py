@@ -39,10 +39,7 @@ def create_prompt() -> Response:
 @prompt_workflow.route("/prompt/<id>", methods=["GET"])
 def get_prompt(id: str) -> Response:
     prompt = mongo.prompts.find_one({"_id": ObjectId(id)})
-    if prompt is None:
-        return Response(status=404)
-
-    return Response(prompt, status=200)
+    return Response(status=404) if prompt is None else Response(prompt, status=200)
 
 
 @prompt_workflow.route("/prompt/<id>", methods=["PUT"])
@@ -69,8 +66,7 @@ def delete_prompt(id: str) -> Response:
 
 def get_validated_prompt_data(request) -> Optional[Prompt]:
     try:
-        data = Prompt(**request.get_json())
-        return data
+        return Prompt(**request.get_json())
     except ValidationError as e:
         print(f"Invalid input: {e}")
         return None

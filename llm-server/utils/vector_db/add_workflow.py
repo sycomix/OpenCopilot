@@ -17,7 +17,7 @@ def add_workflow_data_to_qdrant(
         Document(
             page_content=workflow_data.info.get("title", ""),
             metadata={
-                "workflow_id": str(workflow_id),
+                "workflow_id": workflow_id,
                 "workflow_name": workflow_data.name,
                 "bot_id": bot_id,
             },
@@ -25,5 +25,4 @@ def add_workflow_data_to_qdrant(
     ]
     vector_store = get_vector_store(StoreOptions("swagger"))
 
-    vector_ids = vector_store.add_documents(docs)
-    return vector_ids
+    return vector_store.add_documents(docs)

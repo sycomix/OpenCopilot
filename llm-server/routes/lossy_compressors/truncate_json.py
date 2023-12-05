@@ -18,11 +18,10 @@ def truncate_json(
         # Truncate the list to contain only max_elements
         return json_obj[:max_elements]
     elif isinstance(json_obj, dict):
-        # Recursively process dictionary values
-        truncated_dict = {}
-        for key, value in json_obj.items():
-            truncated_dict[key] = truncate_json(value, max_elements)
-        return truncated_dict
+        return {
+            key: truncate_json(value, max_elements)
+            for key, value in json_obj.items()
+        }
     else:
         # If it's neither a list nor a dictionary, return as is
         return json_obj

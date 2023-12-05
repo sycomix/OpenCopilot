@@ -94,10 +94,18 @@ class SwaggerParser:
 
     def get_validations(self):
         endpoints = self.get_endpoints()
-        validations = {
-            'endpoints_without_operation_id': [endpoint.to_dict() for endpoint in get_endpoints_without_operation_id(endpoints)],
-            'endpoints_without_description': [endpoint.to_dict() for endpoint in get_endpoints_without_description(endpoints)],
-            'endpoints_without_name': [endpoint.to_dict() for endpoint in get_endpoints_without_name(endpoints)],
-            'auth_type': self.get_authorization_type()
+        return {
+            'endpoints_without_operation_id': [
+                endpoint.to_dict()
+                for endpoint in get_endpoints_without_operation_id(endpoints)
+            ],
+            'endpoints_without_description': [
+                endpoint.to_dict()
+                for endpoint in get_endpoints_without_description(endpoints)
+            ],
+            'endpoints_without_name': [
+                endpoint.to_dict()
+                for endpoint in get_endpoints_without_name(endpoints)
+            ],
+            'auth_type': self.get_authorization_type(),
         }
-        return validations

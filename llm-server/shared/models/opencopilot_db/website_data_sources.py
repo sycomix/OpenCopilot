@@ -39,8 +39,6 @@ def get_website_data_source_by_id(website_data_source_id: str):
       The website data source, or `None` if no website data source with the given ID is found.
     """
 
-    website_data_source = WebsiteDataSource.query(
+    return WebsiteDataSource.query(
         WebsiteDataSource.id == website_data_source_id
     ).get()
-
-    return website_data_source

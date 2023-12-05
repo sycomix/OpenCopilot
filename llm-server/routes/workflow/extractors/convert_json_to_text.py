@@ -37,12 +37,12 @@ def convert_json_to_text(
         HumanMessage(
             content="You'll receive user input and server responses obtained by making calls to various APIs. You will also recieve a dictionary that specifies, the body, param and query param used to make those api calls. Your task is to transform the JSON response into a response that in an answer to the user input. You should inform the user about the filters that were used to make these api calls"
         ),
-        HumanMessage(content="Here is the user input: {}.".format(user_input)),
+        HumanMessage(content=f"Here is the user input: {user_input}."),
         HumanMessage(
-            content="Here is the response from the apis: {}".format(api_response)
+            content=f"Here is the response from the apis: {api_response}"
         ),
         HumanMessage(
-            content="Here is the api_request_data: {}".format(api_request_data)
+            content=f"Here is the api_request_data: {api_request_data}"
         ),
     ]
 
