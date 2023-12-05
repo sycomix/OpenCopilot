@@ -5,7 +5,7 @@ def get_summaries(swagger_doc: ResolvingParser) -> str:
     servers = ", ".join(
         [s["url"] for s in swagger_doc.specification.get("servers", [])]
     )
-    summaries_str = "servers:" + servers + "\n"
+    summaries_str = f"servers:{servers}" + "\n"
     paths = swagger_doc.specification.get("paths")
     for path in paths:
         operations = paths[path]

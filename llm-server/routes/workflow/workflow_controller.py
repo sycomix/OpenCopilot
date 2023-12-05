@@ -28,8 +28,7 @@ with open(json_file_path, "r") as workflow_schema_file:
 
 @workflow.route("/<workflow_id>", methods=["GET"])
 def get_workflow(workflow_id: str) -> Any:
-    workflow = mongo.workflows.find_one({"_id": ObjectId(workflow_id)})
-    if workflow:
+    if workflow := mongo.workflows.find_one({"_id": ObjectId(workflow_id)}):
         workflow = json_util.dumps(workflow)
         return workflow, 200, {"Content-Type": "application/json"}
 

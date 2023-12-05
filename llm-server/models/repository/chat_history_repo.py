@@ -90,8 +90,7 @@ def get_all_chat_history(limit: int = 10, offset: int = 0) -> List[ChatHistory]:
       A list of ChatHistory objects.
     """
     with Session() as session:
-        chats = session.query(ChatHistory).limit(limit).offset(offset).all()
-        return chats
+        return session.query(ChatHistory).limit(limit).offset(offset).all()
 
 
 def update_chat_history(
@@ -179,10 +178,9 @@ def get_chat_history_for_retrieval_chain(
 
             if entry.from_user is True:
                 user_query = str(entry.message)
-            else:
-                if user_query is not None:
-                    chat_history.append((user_query, str(entry.message)))
-                    user_query = None
+            elif user_query is not None:
+                chat_history.append((user_query, str(entry.message)))
+                user_query = None
 
     return chat_history
 
@@ -206,16 +204,12 @@ def get_unique_sessions_with_first_message_by_bot_id(
     result_list = []
 
     for session_id in unique_session_ids:
-        # Get the first message in each session
-        first_message = (
+        if first_message := (
             session.query(ChatHistory)
             .filter_by(chatbot_id=bot_id, session_id=session_id[0])
             .order_by(ChatHistory.id.asc())
             .first()
-        )
-
-        # Convert ChatHistory object to a dictionary
-        if first_message:
+        ):
             first_message_dict = {
                 column.key: getattr(first_message, column.key)
                 for column in class_mapper(ChatHistory).mapped_table.columns
@@ -229,7 +223,5 @@ def get_unique_sessions_with_first_message_by_bot_id(
             "first_message": first_message_dict,
         }
 
-        result_list: List[Dict[str, object]] = []
-        result_list.append(result_dict)
-
+        result_list: List[Dict[str, object]] = [result_dict]
     return result_list

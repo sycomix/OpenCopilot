@@ -127,7 +127,7 @@ async def handle_request(
 
 def log_user_request(text: str) -> None:
     logger.info(
-        "[OpenCopilot] Got the following user request: {}".format(text),
+        f"[OpenCopilot] Got the following user request: {text}",
         incident="log_user_request",
         method="log_user_request",
     )
@@ -180,15 +180,13 @@ def handle_existing_workflow(
             {"_id": ObjectId(document.metadata["workflow_id"])}
         )
 
-    output = run_workflow(
+    return run_workflow(
         _workflow,
         swagger_doc,
         WorkflowData(text, headers, server_base_url, swagger_url, app),
         app,
         bot_id=bot_id,
     )
-
-    return output
 
 
 async def handle_api_calls(

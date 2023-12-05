@@ -70,8 +70,7 @@ def delete_prompt_template(id: str) -> Response:
 
 def get_validated_prompt_template_data(request) -> Optional[PromptTemplate]:
     try:
-        data = PromptTemplate(**request.get_json())
-        return data
+        return PromptTemplate(**request.get_json())
     except ValidationError as e:
         print(f"Invalid input: {e}")
         return None

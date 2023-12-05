@@ -50,7 +50,7 @@ def handle_swagger_file():
         return jsonify({"error": "No selected file."}), 400
     if file:
         try:
-            filename = secure_filename(str(uuid.uuid4()) + ".json")
+            filename = secure_filename(f"{str(uuid.uuid4())}.json")
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
             chatbot = create_copilot(
@@ -74,10 +74,8 @@ def handle_swagger_file():
             return (
                 jsonify(
                     {
-                        "failure": "The copilot was created, but we failed to handle the swagger file duo to some"
-                        " validation issues, your copilot will work fine but without the ability to"
-                        " talk with any APIs. error: {}".format(str(e)),
-                        "cp": chatbot_to_dict(copilot)
+                        "failure": f"The copilot was created, but we failed to handle the swagger file duo to some validation issues, your copilot will work fine but without the ability to talk with any APIs. error: {str(e)}",
+                        "cp": chatbot_to_dict(copilot),
                     }
                 ),
                 400,
@@ -205,8 +203,7 @@ def reindex_apis():
     SECRET_KEY = os.getenv("BASIC_AUTH_KEY")
     if not SECRET_KEY:
         raise ValidationError("This is a protected route! Contact admin")
-    if request.headers.get("Authorization") == f"Bearer {SECRET_KEY}":
-        response = reindex_service.reindex_apis()
-        return Response(response=response, status=200)
-    else:
+    if request.headers.get("Authorization") != f"Bearer {SECRET_KEY}":
         return Response(response="Unauthorized", status=401)
+    response = reindex_service.reindex_apis()
+    return Response(response=response, status=200)

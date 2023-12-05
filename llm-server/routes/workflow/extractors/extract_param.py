@@ -23,10 +23,10 @@ async def gen_params_from_schema(
         SystemMessage(
             content="You are an intelligent machine learning model that can produce REST API's params / query params in json format, given the json schema, user input, data from previous api calls, and current application state."
         ),
-        HumanMessage(content="Json Schema: {}.".format(param_schema)),
-        HumanMessage(content="prev api responses: {}.".format(prev_resp)),
-        HumanMessage(content="User's requirement: {}.".format(text)),
-        HumanMessage(content="Current state: {}.".format(current_state)),
+        HumanMessage(content=f"Json Schema: {param_schema}."),
+        HumanMessage(content=f"prev api responses: {prev_resp}."),
+        HumanMessage(content=f"User's requirement: {text}."),
+        HumanMessage(content=f"Current state: {current_state}."),
         HumanMessage(
             content="If the user is asking to generate values for some fields, likes product descriptions, jokes etc add them."
         ),
@@ -36,7 +36,7 @@ async def gen_params_from_schema(
         HumanMessage(content="Your output must be a valid json"),
     ]
     result = chat(messages)
-    logger.info("[OpenCopilot] LLM Body Response: {}".format(result.content))
+    logger.info(f"[OpenCopilot] LLM Body Response: {result.content}")
     d: Optional[JsonData] = extract_json_payload(result.content)
     logger.info("Parsed params from schema", text=text, params=d)
     return d

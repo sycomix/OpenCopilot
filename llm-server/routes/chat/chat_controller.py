@@ -45,20 +45,17 @@ def get_session_chats(session_id: str) -> Response:
 
     chats = get_all_chat_history_by_session_id(session_id, limit, offset)
 
-    chats_filtered = []
-
-    for chat in chats:
-        chats_filtered.append(
-            {
-                "chatbot_id": chat.chatbot_id,
-                "created_at": chat.created_at,
-                "from_user": chat.from_user,
-                "id": chat.id,
-                "message": chat.message,
-                "session_id": chat.session_id,
-            }
-        )
-
+    chats_filtered = [
+        {
+            "chatbot_id": chat.chatbot_id,
+            "created_at": chat.created_at,
+            "from_user": chat.from_user,
+            "id": chat.id,
+            "message": chat.message,
+            "session_id": chat.session_id,
+        }
+        for chat in chats
+    ]
     return jsonify(chats_filtered)
 
 
@@ -66,11 +63,9 @@ def get_session_chats(session_id: str) -> Response:
 def get_chat_sessions(bot_id: str) -> list[dict[str, object]]:
     limit = cast(int, request.args.get("limit", 20))
     offset = cast(int, request.args.get("offset", 0))
-    chat_history_sessions = get_unique_sessions_with_first_message_by_bot_id(
+    return get_unique_sessions_with_first_message_by_bot_id(
         bot_id, limit, offset
     )
-
-    return chat_history_sessions
 
 
 @chat_workflow.route("/init", methods=["GET"])

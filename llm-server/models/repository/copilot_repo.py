@@ -50,8 +50,7 @@ def list_all_with_filter(filter_criteria: Optional[Any] = None) -> List[Chatbot]
 def get_total_chatbots() -> int:
     session: Session = SessionLocal()
     try:
-        total_chatbots = session.query(Chatbot).count()
-        return total_chatbots
+        return session.query(Chatbot).count()
     except Exception as e:
         raise e
     finally:
@@ -61,8 +60,7 @@ def get_total_chatbots() -> int:
 def get_chatbots_batch(offset: int, batch_size: int) -> Iterable[Chatbot]:
     session: Session = SessionLocal()
     try:
-        chatbots_batch = session.query(Chatbot).offset(offset).limit(batch_size).all()
-        return chatbots_batch
+        return session.query(Chatbot).offset(offset).limit(batch_size).all()
     except Exception as e:
         raise e
     finally:
@@ -152,8 +150,7 @@ def find_one_or_fail_by_id(bot_id: str) -> Chatbot:
     """
     session: Session = SessionLocal()
     try:
-        bot = session.query(Chatbot).filter(Chatbot.id == str(bot_id)).one()
-        return bot
+        return session.query(Chatbot).filter(Chatbot.id == bot_id).one()
     except exc.NoResultFound:
         raise ValueError(f"No Chatbot found with id: {bot_id}")
     except Exception as e:
@@ -179,8 +176,7 @@ def find_one_or_fail_by_token(bot_token: str) -> Chatbot:
     """
     session: Session = SessionLocal()
     try:
-        bot = session.query(Chatbot).filter(Chatbot.token == str(bot_token)).one()
-        return bot
+        return session.query(Chatbot).filter(Chatbot.token == bot_token).one()
     except exc.NoResultFound:
         raise ValueError(f"No Chatbot found with token: {bot_token}")
     except Exception as e:

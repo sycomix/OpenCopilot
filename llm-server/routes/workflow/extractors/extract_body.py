@@ -36,10 +36,10 @@ async def gen_body_from_schema(
         HumanMessage(
             content="You will be given swagger schema, user input, data from previous api calls, and current state information stored in the current_state variable. You should use the field descriptions provided in the schema to generate the payload."
         ),
-        HumanMessage(content="Swagger Schema: {}".format(body_schema)),
-        HumanMessage(content="User input: {}".format(text)),
-        HumanMessage(content="prev api responses: {}".format(prev_api_response)),
-        HumanMessage(content="current_state: {}".format(current_state)),
+        HumanMessage(content=f"Swagger Schema: {body_schema}"),
+        HumanMessage(content=f"User input: {text}"),
+        HumanMessage(content=f"prev api responses: {prev_api_response}"),
+        HumanMessage(content=f"current_state: {current_state}"),
         HumanMessage(
             content="If the user is asking to generate values for some fields, likes product descriptions, jokes etc add them."
         ),
@@ -49,7 +49,7 @@ async def gen_body_from_schema(
     ]
 
     if api_generation_prompt is not None:
-        messages.append(HumanMessage(content="{}".format(api_generation_prompt)))
+        messages.append(HumanMessage(content=f"{api_generation_prompt}"))
 
     result = chat(messages)
 

@@ -173,27 +173,26 @@ def retry_failed_pdf_crawl():
     """
 
     try:
-        if request.json:
-            chatbot_id = request.json["chatbot_id"]
-            file_name = request.json["file_name"]
-            celery.send_task(
-                "workers.pdf_crawl.retry_failed_pdf_crawl", args=[chatbot_id, file_name]
-            )
-
-            return Response(
-                status=415,
-                response={
-                    "status": "415 Unsupported Media Type",
-                    "error": "Unsupported Media Type",
-                },
-                mimetype="application/json",
-            )
-        else:
+        if not request.json:
             return Response(
                 status=200,
                 response={"status": "retrying", "error": None},
                 mimetype="application/json",
             )
+        chatbot_id = request.json["chatbot_id"]
+        file_name = request.json["file_name"]
+        celery.send_task(
+            "workers.pdf_crawl.retry_failed_pdf_crawl", args=[chatbot_id, file_name]
+        )
+
+        return Response(
+            status=415,
+            response={
+                "status": "415 Unsupported Media Type",
+                "error": "Unsupported Media Type",
+            },
+            mimetype="application/json",
+        )
     except Exception as e:
         # Handle the exception and return a proper Response object
         return Response(
